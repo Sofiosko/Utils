@@ -1,16 +1,31 @@
-The whole library purpose is to simplify working with Czech VAT while it allows to extend and bend computing logic of every important operation.
-
+ArrayWalker
 ```php
-$cl = new \BiteIT\Taxes\CalcLogic();
+$array = [
+    'level-1' => [
+        'value' => 1,
+        'level-2' => [
+            'value' => 2
+        ]
+    ]
+];
 
-$pl = new \BiteIT\Taxes\PriceList(\BiteIT\Taxes\Rates::HIGH_PERCENT, $cl);
-
-$pl->addWithVat(121, 1);
-$pl->addWithVat(200, 2, \BiteIT\Taxes\Rates::MEDIUM_PERCENT);
-$pl->addWithVat(299, 4, \BiteIT\Taxes\Rates::LOW_PERCENT);
+$walker = \BiteSHOP\Utils\ArrayWalker::create($array);
 
 var_dump([
-    $pl->getTotalsWithVat(),
-    $pl->getTotalsWithoutVat()
+    $walker->get('level-1/value'), // returns 1
+    $walker->get('level-1/level-2) // returns ['value' => 2]
 ]);
+```
+
+Timer that nests processes and renders nested lists 
+```php
+\BiteSHOP\Utils\Timer::start('level-1');
+// your code
+\BiteSHOP\Utils\Timer::start('level-1-1');
+// your code
+\BiteSHOP\Utils\Timer::end('level-1-1');
+\BiteSHOP\Utils\Timer::end('level-1');
+
+// renders nested list
+echo \BiteSHOP\Utils\Timer::getInstance()->renderList();
 ```
