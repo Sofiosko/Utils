@@ -1,6 +1,6 @@
 {
-  "name": "biteit/taxes",
-  "description": "Library for working with Czech taxes",
+  "name": "biteit/utils",
+  "description": "Library of useful classes",
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.1"
