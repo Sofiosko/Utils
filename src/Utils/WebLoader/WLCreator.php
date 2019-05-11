@@ -2,7 +2,14 @@
 
 namespace BiteSHOP\Utils;
 
-
+/**
+ * WebLoaderCreator allows shorter initialization of WebLoaders by presetting all necessary paths
+ *
+ * Then you can create instance of webloader by calling get(Css/Js)Loader
+ *
+ * Class WLCreator
+ * @package BiteSHOP\Utils
+ */
 class WLCreator
 {
     /** @var string Absolute path */

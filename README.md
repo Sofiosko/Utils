@@ -29,3 +29,31 @@ Timer that nests processes and renders nested lists
 // renders nested list
 echo \BiteSHOP\Utils\Timer::getInstance()->renderList();
 ```
+
+WebLoader using WLCreator
+```php
+use BiteSHOP\Utils\WLCreator;
+
+$wlc = new WLCreator(__DIR__.'/webtemp/', 'http://localhost/Utils/tests/webtemp', __DIR__.'/assets', 'http://localhost/Utils/tests/assets');
+$wlc->setCache(true);
+
+$wl = $wlc->getCssLoader();
+$wl->addLocal('style.css');
+$wl->addLocal('style-2.css');
+$wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+echo $wl->render();
+```
+
+Standard usage
+```php
+use BiteSHOP\Utils\WebLoader;
+
+$wl = new WebLoader(WebLoader::TYPE_CSS, __DIR__.'/assets', 'http://localhost/Utils/tests/assets');
+$wl->setCache(true);
+$wl->setDestination(__DIR__.'/webtemp/', 'http://localhost/Utils/tests/webtemp');
+$wl->addLocal('style.css');
+$wl->addLocal('style-2.css');
+$wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+
+echo $wl->render();
+```

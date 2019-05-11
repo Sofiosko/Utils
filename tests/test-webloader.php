@@ -24,6 +24,21 @@ use BiteSHOP\Utils\WLCreator;
     $wl->addLocal('style-3.css');
     $wl->addLocal('style-4.css');
     echo $wl->render();
+
+    $wl = $wlc->getJsLoader();
+    $wl->addLocal('test.js');
+    $wl->addLocal('test-2.js');
+    echo $wl->render();
+
+
+//    $wl = new WebLoader(WebLoader::TYPE_CSS, __DIR__.'/assets', 'http://localhost/Utils/tests/assets');
+//    $wl->setCache(true);
+//    $wl->setDestination(__DIR__.'/webtemp/', 'http://localhost/Utils/tests/webtemp');
+//    $wl->addLocal('style.css');
+//    $wl->addLocal('style-2.css');
+//    $wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+//
+//    echo $wl->render();
     ?>
 </head>
 
