@@ -1,4 +1,5 @@
 <?php
+
 namespace BiteSHOP\Utils;
 
 class TimedItem
@@ -27,7 +28,8 @@ class TimedItem
     /**
      * @return $this
      */
-    public function end(){
+    public function end()
+    {
         $this->endTime = microtime(true);
         return $this;
     }
@@ -36,7 +38,8 @@ class TimedItem
      * @param TimedItem $item
      * @return $this
      */
-    public function add(TimedItem $item){
+    public function add(TimedItem $item)
+    {
         $item->setParent($this);
         $this->children[] = $item;
         return $this;
@@ -46,7 +49,8 @@ class TimedItem
      * @param int $precision
      * @return float
      */
-    public function getLength($precision = 4){
+    public function getLength($precision = 4)
+    {
         return round($this->endTime - $this->startTime, 4);
     }
 
@@ -54,7 +58,8 @@ class TimedItem
      * @param TimedItem $item
      * @return $this
      */
-    public function setParent(TimedItem $item){
+    public function setParent(TimedItem $item)
+    {
         $this->parent = $item;
         return $this;
     }
@@ -62,21 +67,24 @@ class TimedItem
     /**
      * @return TimedItem
      */
-    public function getParent(){
+    public function getParent()
+    {
         return $this->parent;
     }
 
     /**
      * @return TimedItem[]
      */
-    public function getChildren(){
+    public function getChildren()
+    {
         return $this->children;
     }
 
     /**
      * @return bool
      */
-    public function isFinished(){
+    public function isFinished()
+    {
         return isset($this->endTime);
     }
 }

@@ -33,7 +33,7 @@ $keys = [
 $walker = \BiteSHOP\Utils\ArrayWalker::create($array);
 
 echo '<pre>';
-foreach ($keys as $key){
+foreach ($keys as $key) {
 
     var_dump($walker->get($key));
 

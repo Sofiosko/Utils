@@ -1,4 +1,5 @@
 <?php
+
 namespace BiteSHOP\Utils;
 
 class WebLoaderItem

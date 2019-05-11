@@ -37,7 +37,7 @@ class Timer
      */
     public static function start($processName)
     {
-        if(!static::$enabled)
+        if (!static::$enabled)
             return false;
 
         $timer = static::getInstance();
@@ -72,7 +72,7 @@ class Timer
      */
     public static function end($processName)
     {
-        if(!static::$enabled)
+        if (!static::$enabled)
             return false;
 
         $timer = static::getInstance();
@@ -86,7 +86,8 @@ class Timer
     /**
      * @param bool $state
      */
-    public static function enable($state = true){
+    public static function enable($state = true)
+    {
         static::$enabled = $state;
     }
 
