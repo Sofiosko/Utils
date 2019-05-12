@@ -3,6 +3,7 @@ require_once __DIR__ . '/../src/init.php';
 
 use BiteSHOP\Utils\WebLoader;
 use BiteSHOP\Utils\WLCreator;
+use BiteSHOP\Utils\Timer;
 
 ?>
 <html lang="en">
@@ -12,7 +13,7 @@ use BiteSHOP\Utils\WLCreator;
     <title>Webloader test</title>
     <meta name="author" content="Marek Konderla">
     <?php
-    ob_start();
+    Timer::start('WebLoader');
     $wlc = new WLCreator(__DIR__ . '/webtemp/', 'http://localhost/Utils/tests/webtemp', __DIR__ . '/assets', 'http://localhost/Utils/tests/assets');
     $wlc->setCache(true);
 
@@ -35,9 +36,7 @@ use BiteSHOP\Utils\WLCreator;
     $wl->addLocal('test-2.js');
     $wl->addLocal('test-3.min.js');
     echo $wl->render();
-
-    $header = ob_get_clean();
-    echo $header;
+    Timer::end('WebLoader');
     ?>
 </head>
 

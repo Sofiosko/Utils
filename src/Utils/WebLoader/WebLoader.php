@@ -137,6 +137,8 @@ class WebLoader
      */
     public function render()
     {
+        Timer::start('WebLoader-render');
+
         if ($this->cache) {
             if (!isset($this->destinationDir))
                 throw new \InvalidArgumentException('Please set destination dir');
@@ -146,6 +148,7 @@ class WebLoader
 
         $html = '';
         if ($this->cache && $this->itemsType == static::TYPE_CSS) {
+            Timer::start('WebLoader-render-css');
             $itemsToMinimize = [];
             foreach ($this->items as $item) {
                 // && !$item->isMinified()
@@ -154,8 +157,12 @@ class WebLoader
                 } else
                     $html .= $item->render();
             }
+            Timer::start('WebLoader-render-css-minifying');
             $html .= $this->_getMinimizedCss($itemsToMinimize)->render();
+            Timer::end('WebLoader-render-css-minifying');
+            Timer::end('WebLoader-render-css');
         } elseif ($this->cache && $this->itemsType == static::TYPE_JS) {
+            Timer::start('WebLoader-render-js');
             $itemsToMinimize = [];
             foreach ($this->items as $item) {
                 // && !$item->isMinified()
@@ -164,13 +171,18 @@ class WebLoader
                 } else
                     $html .= $item->render();
             }
+            Timer::start('WebLoader-render-js-minifying');
             $html .= $this->_getMinimizedJs($itemsToMinimize)->render();
+            Timer::end('WebLoader-render-js-minifying');
+            Timer::end('WebLoader-render-js');
         } else {
             foreach ($this->items as $item) {
                 $html .= $item->render();
             }
         }
         $this->items = [];
+
+        Timer::end('WebLoader-render');
 
         return $html;
     }

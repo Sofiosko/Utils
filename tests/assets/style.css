@@ -1,3 +1,16 @@
-.class {
-    display: block;
+body {
+    padding: 30px;
+}
+
+.process-tree {
+    list-style-type: decimal;
+    padding: 0 0 15px 15px;
+    margin: 15px 0 15px 15px;
+}
+
+.process-tree li {
+    border-left: 1px solid #cecece;
+    border-top: 1px solid #cecece;
+    padding-left: 15px;
+    margin-bottom: 15px;
 }
