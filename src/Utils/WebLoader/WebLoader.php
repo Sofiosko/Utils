@@ -124,7 +124,8 @@ class WebLoader
      * @param $url
      * @return $this
      */
-    public function setDestination($dir, $url){
+    public function setDestination($dir, $url)
+    {
         $this->destinationDir = static::unifyPath($dir);
         $this->destinationUrl = static::unifyPath($url);
         return $this;
@@ -136,10 +137,10 @@ class WebLoader
      */
     public function render()
     {
-        if($this->cache){
-            if(!isset($this->destinationDir))
+        if ($this->cache) {
+            if (!isset($this->destinationDir))
                 throw new \InvalidArgumentException('Please set destination dir');
-            if(!isset($this->destinationUrl))
+            if (!isset($this->destinationUrl))
                 throw new \InvalidArgumentException('Please set destination url');
         }
 
@@ -147,6 +148,7 @@ class WebLoader
         if ($this->cache && $this->itemsType == static::TYPE_CSS) {
             $itemsToMinimize = [];
             foreach ($this->items as $item) {
+                // && !$item->isMinified()
                 if ($item->isLocal()) {
                     $itemsToMinimize[] = $item;
                 } else
@@ -156,7 +158,8 @@ class WebLoader
         } elseif ($this->cache && $this->itemsType == static::TYPE_JS) {
             $itemsToMinimize = [];
             foreach ($this->items as $item) {
-                if ($item->isLocal() && !$item->isMinified()) {
+                // && !$item->isMinified()
+                if ($item->isLocal()) {
                     $itemsToMinimize[] = $item;
                 } else
                     $html .= $item->render();
@@ -233,7 +236,8 @@ class WebLoader
         return $webLoaderItem;
     }
 
-    protected function isFileObsolete($fileName){
+    protected function isFileObsolete($fileName)
+    {
         return !file_exists($fileName) || filemtime($fileName) <= (time() - $this->maxFileAge);
     }
 
@@ -335,5 +339,46 @@ class WebLoader
     public static function unifyPath($path)
     {
         return (substr($path, -1) == '/' ? $path : $path . '/');
+    }
+
+    /**
+     * Checks remote sources, should be used only for one time checks
+     *
+     * @throws \Exception
+     */
+    public function validateRemoteSources()
+    {
+        foreach ($this->items as $item){
+            if(!$item->isLocal() && !$this->urlExists($item->getPath())){
+                throw new \Exception('Source: '.$item->getPath().' does not exist');
+            }
+        }
+    }
+
+    /**
+     * @param $url
+     * @return bool
+     */
+    protected function urlExists($url)
+    {
+        if (function_exists('curl_init') === false) {
+            $h = get_headers($url);
+            $status = array();
+            preg_match('/HTTP\/.* ([0-9]+) .*/', $h[0], $status);
+            if(!isset($status[1]))
+                return false;
+            return ($status[1] == 200);
+        } else {
+            $ch = @curl_init($url);
+            @curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            @curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+            @curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $status = array();
+            preg_match('/HTTP\/.* ([0-9]+) .*/', @curl_exec($ch), $status);
+            if(!isset($status[1]))
+                return false;
+            return ($status[1] == 200);
+        }
     }
 }

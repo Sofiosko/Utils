@@ -39,6 +39,11 @@ class WebLoaderItem
         return $this->fileName;
     }
 
+    public function getPath()
+    {
+        return $this->path;
+    }
+
     public function getMTime()
     {
         if ($this->isLocal()) {
@@ -87,7 +92,7 @@ class WebLoaderItem
             else
                 $properties[] = $key;
         }
-        return "<link " . implode(" ", $properties) . " />";
+        return '<link ' . implode(' ', $properties) . ' />';
     }
 
     protected function renderJs()
@@ -96,6 +101,6 @@ class WebLoaderItem
         foreach ($this->properties as $key => $value) {
             $properties[] = $key . '="' . $value . '"';
         }
-        return "<script " . implode(" ", $properties) . "></script>";
+        return '<script ' . implode(' ', $properties) . '></script>';
     }
 }
