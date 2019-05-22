@@ -58,5 +58,8 @@ $wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap
 echo $wl->render();
 ```
 
-Known issues:
-- Assets must be accesible trough URL for non cached webloader render
+WebLoader known issues:
+- Assets baseUrl must be accessible trough browser for non cached webloader render. Because it will just render list of sources with timestamp at the end.
+
+ArrayWalker known issues:
+- Multidimensional OffsetGet and OffsetUnset not working. ArrayWalker was not intended to implement ArrayAccess but may be fixed soon.
