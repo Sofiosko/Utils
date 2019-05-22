@@ -1,7 +1,7 @@
 {
   "name": "biteit/utils",
   "description": "Library of useful classes",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
 	"php": ">=7.1",
 	"matthiasmullie/minify": "1.3.57"
