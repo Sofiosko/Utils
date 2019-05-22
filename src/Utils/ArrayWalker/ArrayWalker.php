@@ -1,6 +1,6 @@
 <?php
 
-namespace BiteSHOP\Utils;
+namespace BiteIT\Utils;
 
 class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
 {

@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/../src/init.php';
 
-use BiteSHOP\Utils\WebLoader;
-use BiteSHOP\Utils\WLCreator;
-use BiteSHOP\Utils\Timer;
+use BiteIT\Utils\WebLoader;
+use BiteIT\Utils\WLCreator;
+use BiteIT\Utils\Timer;
 
 ?>
 <html lang="en">
@@ -42,7 +42,7 @@ use BiteSHOP\Utils\Timer;
 
 <body>
 <?php
-echo \BiteSHOP\Utils\Timer::getInstance()->renderList();
+echo \BiteIT\Utils\Timer::getInstance()->renderList();
 ?>
 </body>
 </html>

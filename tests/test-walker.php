@@ -30,7 +30,7 @@ $keys = [
 /**
  * Walker
  */
-$walker = \BiteSHOP\Utils\ArrayWalker::create($array);
+$walker = \BiteIT\Utils\ArrayWalker::create($array);
 
 echo '<pre>';
 echo '<h2>ArrayWalker Get Tests</h2>';

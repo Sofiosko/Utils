@@ -1,6 +1,6 @@
 <?php
 
-namespace BiteSHOP\Utils;
+namespace BiteIT\Utils;
 
 /**
  * WebLoaderCreator allows shorter initialization of WebLoaders by presetting all necessary paths
@@ -8,7 +8,7 @@ namespace BiteSHOP\Utils;
  * Then you can create instance of webloader by calling get(Css/Js)Loader
  *
  * Class WLCreator
- * @package BiteSHOP\Utils
+ * @package BiteIT\Utils
  */
 class WLCreator
 {
