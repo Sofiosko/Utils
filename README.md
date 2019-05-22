@@ -57,3 +57,6 @@ $wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap
 
 echo $wl->render();
 ```
+
+Known issues:
+- Assets must be accesible trough URL for non cached webloader render
