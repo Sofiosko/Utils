@@ -43,6 +43,9 @@ class WebLoader
     /** @var JS|null */
     protected $jsMinifier = null;
 
+    /** @var string */
+    protected $archiveDir;
+
     /**
      * @var array Now is supported only minification of css files
      */
@@ -131,6 +134,12 @@ class WebLoader
         return $this;
     }
 
+    public function setArchiveDir($dir)
+    {
+        $this->archiveDir = $dir;
+        return $this;
+    }
+
     /**
      * @return string
      * @throws \Exception
@@ -161,6 +170,7 @@ class WebLoader
             $html .= $this->_getMinimizedCss($itemsToMinimize)->render();
             Timer::end('WebLoader-render-css-minifying');
             Timer::end('WebLoader-render-css');
+
         } elseif ($this->cache && $this->itemsType == static::TYPE_JS) {
             Timer::start('WebLoader-render-js');
             $itemsToMinimize = [];
@@ -321,6 +331,9 @@ class WebLoader
     {
         $files = glob($this->_getPathToWebTemp() . "style-$baseHash-*.css");
         foreach ($files as $file) {
+            if(isset($this->archiveDir) && file_exists($file)){
+                copy($file, $this->archiveDir.'/'.basename($file));
+            }
             @unlink($file);
         }
         return $this;
@@ -330,6 +343,9 @@ class WebLoader
     {
         $files = glob($this->_getPathToWebTemp() . "js-$baseHash-*.js");
         foreach ($files as $file) {
+            if(isset($this->archiveDir) && file_exists($file)){
+                copy($file, $this->archiveDir.'/'.basename($file));
+            }
             @unlink($file);
         }
         return $this;
