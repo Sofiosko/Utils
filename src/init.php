@@ -6,6 +6,9 @@ require_once __DIR__ . '/Utils/WebLoader/WebLoader.php';
 require_once __DIR__ . '/Utils/WebLoader/WebLoaderItem.php';
 require_once __DIR__ . '/Utils/WebLoader/WLCreator.php';
 require_once __DIR__ . '/Utils/Subjects/Subjects.php';
+require_once __DIR__ . '/Utils/Subjects/Subject.php';
+require_once __DIR__ . '/Utils/Subjects/SubjectsResponse.php';
+require_once __DIR__ . '/Utils/Subjects/Helpers.php';
 
 // install vendor in this package for testing
 //require_once __DIR__ . '/../vendor/autoload.php';
