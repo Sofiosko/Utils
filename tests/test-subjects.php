@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../src/init.php';
 
 $api = new \BiteIT\Utils\Subjects('key');
-$api->setCache(__DIR__ . '/temp', 10);
+$api->setCache(__DIR__ . '/temp/subjects', 10);
 
 echo '<pre>';
 var_dump([

@@ -1,4 +1,5 @@
 <?php
+
 namespace BiteIT\Utils;
 
 class Subjects
@@ -22,8 +23,9 @@ class Subjects
      * @param null $cacheTime
      * @return $this
      */
-    public function setCache($cacheFolder, $cacheTime = null){
-        if(isset($cacheTime))
+    public function setCache($cacheFolder, $cacheTime = null)
+    {
+        if (isset($cacheTime))
             $this->cacheTime = $cacheTime;
 
         $this->cacheFolder = $cacheFolder;
@@ -33,64 +35,68 @@ class Subjects
     /**
      * @param string $companyCode
      * @param string $countryCode
-     * @return bool|null
+     * @return Subject|null
      * @throws \Exception
      */
-    public function getCompanyInfo(string $companyCode, $countryCode = Subjects::COUNTRY_CZ){
+    public function getCompanyInfo(string $companyCode, $countryCode = Subjects::COUNTRY_CZ)
+    {
         $res = $this->callApi('get-info', [
             'cc' => $countryCode,
             'number' => $companyCode,
             'key' => $this->license
         ]);
 
-        if($res){
+        if ($res) {
             $res = json_decode($res);
-            if(isset($res->info))
-                return $res->info;
-            return false;
-        } else {
-            return null;
+            if (isset($res->info)) {
+                $subject = Subject::createFromResponse($res->info);
+                return $subject;
+            }
         }
+
+        return null;
     }
 
     /**
      * @param string $taxNumber
      * @param string $countryCode
-     * @return bool|null
+     * @return bool
      * @throws \Exception
      */
-    public function validateTaxNumber(string $taxNumber, $countryCode = Subjects::COUNTRY_CZ){
+    public function validateTaxNumber(string $taxNumber, $countryCode = Subjects::COUNTRY_CZ)
+    {
         $res = $this->callApi('validate-tax-number', [
             'cc' => $countryCode,
             'number' => $taxNumber,
             'key' => $this->license
         ]);
 
-        if($res){
+        if ($res) {
             return boolval(json_decode($res)->success);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * @param string $companyCode
      * @param string $countryCode
-     * @return bool|null
+     * @return bool
      * @throws \Exception
      */
-    public function validateCompanyCode(string $companyCode, $countryCode = Subjects::COUNTRY_CZ){
+    public function validateCompanyCode(string $companyCode, $countryCode = Subjects::COUNTRY_CZ)
+    {
         $res = $this->callApi('validate-company-code', [
             'cc' => $countryCode,
             'number' => $companyCode,
             'key' => $this->license
         ]);
 
-        if($res){
+        if ($res) {
             return boolval(json_decode($res)->success);
-        } else {
-            return null;
         }
+
+        return null;
 
     }
 
@@ -116,24 +122,25 @@ class Subjects
      * @param bool $cache
      * @return false|string
      */
-    protected function callApi(string $endpoint, array $params, $cache = true){
-        $url = static::SUBJECTS_API_URL.'/'.$endpoint.'?'.http_build_query($params);
-        $file = realpath($this->cacheFolder).'/response-'.md5($url).'.json';
+    protected function callApi(string $endpoint, array $params, $cache = true)
+    {
+        $url = static::SUBJECTS_API_URL . '/' . $endpoint . '?' . http_build_query($params);
+        $file = realpath($this->cacheFolder) . '/response-' . md5($url) . '.json';
 
-        if($cache){
-            if(!isset($this->cacheFolder))
+        if ($cache) {
+            if (!isset($this->cacheFolder))
                 throw new \Exception('Please set cache folder');
 
-            if(!file_exists($this->cacheFolder))
+            if (!file_exists($this->cacheFolder))
                 mkdir($this->cacheFolder, 0755, true);
 
-            if(file_exists($file) && time() < (filemtime($file) + $this->cacheTime)) {
+            if (file_exists($file) && time() < (filemtime($file) + $this->cacheTime)) {
                 return file_get_contents($file);
             }
         }
 
         $response = file_get_contents($url);
-        if($cache)
+        if ($cache)
             file_put_contents($file, $response);
         return $response;
     }

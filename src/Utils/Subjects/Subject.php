@@ -9,8 +9,21 @@ class Subject
             $isCompany = false,
             $street,
             $zip,
-            $city,
+            $city;
 
-            $hasValidCompanyCode = false,
-            $hasValidTaxNumber = false;
+    /**
+     * @param \stdClass $info
+     * @return Subject
+     */
+    public static function createFromResponse(\stdClass $info){
+        $subject = new static();
+        $subject->companyCode = $info->__number;
+        $subject->taxNumber = $info->__taxNumber;
+        $subject->companyName = $info->__company;
+        $subject->isCompany = $info->__fyz != 1;
+        $subject->street = $info->__street;
+        $subject->city = $info->__city;
+        $subject->zip = $info->__zip;
+        return $subject;
+    }
 }
