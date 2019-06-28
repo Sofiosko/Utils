@@ -10,7 +10,7 @@ class Subjects
     const SUBJECTS_API_URL = 'http://subjects.biteit.cz/api';
 
     protected $license;
-    protected $cacheTime = 3600;
+    protected $cacheTime = 86400;
     protected $cacheFolder;
 
     public function __construct($license)
