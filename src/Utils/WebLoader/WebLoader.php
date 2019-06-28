@@ -153,7 +153,11 @@ class WebLoader
                 throw new \InvalidArgumentException('Please set destination dir');
             if (!isset($this->destinationUrl))
                 throw new \InvalidArgumentException('Please set destination url');
+
+            $this->validateCacheDestination();
         }
+
+        var_dump($this->cache);
 
         $html = '';
         if ($this->cache && $this->itemsType == static::TYPE_CSS) {
@@ -216,7 +220,8 @@ class WebLoader
         $fileName = $tempFolder . $name;
         $displayName = $this->destinationUrl . $name;
 
-        if ($this->isFileObsolete($fileName)) {
+        if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
+            var_dump('recreating:'.$fileName);
             $this->_removeAllOldCSSFiles($baseHash);
             $cssContent = $this->_minimizeAndMergeCss($items);
             file_put_contents($fileName, $cssContent);
@@ -250,7 +255,8 @@ class WebLoader
         $fileName = $tempFolder . $name;
         $displayName = $this->destinationUrl . $name;
 
-        if ($this->isFileObsolete($fileName)) {
+        if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
+            var_dump('recreating:'.$fileName);
             $this->_removeAllOldJSFiles($baseHash);
             $this->jsMinifier->minify($fileName);
         }
@@ -261,6 +267,14 @@ class WebLoader
     protected function isFileObsolete($fileName)
     {
         return !file_exists($fileName) || filemtime($fileName) <= (time() - $this->maxFileAge);
+    }
+
+    protected function isFileInvalid($fileName){
+        if(!is_readable($fileName))
+            return true;
+        if(strlen(file_get_contents($fileName)) <= 10)
+            return true;
+        return false;
     }
 
     /**
@@ -408,5 +422,14 @@ class WebLoader
                 return false;
             return ($status[1] == 200);
         }
+    }
+
+    protected function validateCacheDestination(){
+        $destinationDir = $this->destinationDir;
+        if(!file_exists($destinationDir) || !is_dir($destinationDir) || !is_readable($destinationDir)){
+            $this->cache = false;
+            return false;
+        }
+        return true;
     }
 }

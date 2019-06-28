@@ -10,4 +10,4 @@ require_once __DIR__ . '/Utils/Subjects/Subject.php';
 require_once __DIR__ . '/Utils/Subjects/Helpers.php';
 
 // install vendor in this package for testing
-//require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
