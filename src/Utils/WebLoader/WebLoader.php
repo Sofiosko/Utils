@@ -215,15 +215,15 @@ class WebLoader
         $itemsHashName = "$baseHash-$itemsHash";
 
         $name = 'style-' . $itemsHashName . '.css';
-        $fileName = $tempFolder . $name;
-        $displayName = $this->destinationUrl . $name;
+        $destinationFileName = $tempFolder . $name;
+        $destinationUrl = $this->destinationUrl . $name;
 
-        if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
+        if ($this->isFileObsolete($destinationFileName) || $this->isFileInvalid($destinationFileName)) {
             $this->_removeAllOldCSSFiles($baseHash);
             $cssContent = $this->_minimizeAndMergeCss($items);
-            file_put_contents($fileName, $cssContent);
+            file_put_contents($destinationFileName, $cssContent);
         }
-        $webLoaderItem = new WebLoaderItem($displayName, static::TYPE_CSS, true);
+        $webLoaderItem = new WebLoaderItem($destinationUrl, static::TYPE_CSS, false, $destinationFileName);
         return $webLoaderItem;
     }
 
@@ -239,9 +239,7 @@ class WebLoader
         $tempFolder = $this->_getPathToWebTemp();
 
         foreach ($items as $item) {
-            if ($item->getFileName()) {
-                $this->jsMinifier->add($item->getFileName());
-            }
+            $this->jsMinifier->add($item->getClearPath());
         }
 
         $baseHash = $this->_getFilesBaseHash($items);
@@ -249,14 +247,14 @@ class WebLoader
         $itemsHashName = "$baseHash-$itemsHash";
 
         $name = 'js-' . $itemsHashName . '.min.js';
-        $fileName = $tempFolder . $name;
-        $displayName = $this->destinationUrl . $name;
+        $destinationFileName = $tempFolder . $name;
+        $destinationUrl = $this->destinationUrl . $name;
 
-        if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
+        if ($this->isFileObsolete($destinationFileName) || $this->isFileInvalid($destinationFileName)) {
             $this->_removeAllOldJSFiles($baseHash);
-            $this->jsMinifier->minify($fileName);
+            $this->jsMinifier->minify($destinationFileName);
         }
-        $webLoaderItem = new WebLoaderItem($displayName, static::TYPE_JS, true);
+        $webLoaderItem = new WebLoaderItem($destinationUrl, static::TYPE_JS, false, $destinationFileName);
         return $webLoaderItem;
     }
 
@@ -281,9 +279,7 @@ class WebLoader
     {
         $itemsKey = "";
         foreach ($items as $item) {
-            if ($item->getFileName()) {
-                $itemsKey .= $item->getFileName();
-            }
+            $itemsKey .= $item->getDisplayPath();
         }
         $itemsHash = md5($itemsKey);
         return $itemsHash;
@@ -297,11 +293,9 @@ class WebLoader
     {
         $itemsKey = "";
         foreach ($items as $item) {
-            if ($item->getFileName()) {
-                $itemsKey .= $item->getFileName();
-                if ($item->isLocal()) {
-                    $itemsKey .= '?t=' . $item->getMTime();
-                }
+            $itemsKey .= $item->getDisplayPath();
+            if ($item->isLocal()) {
+                $itemsKey .= '?t=' . $item->getMTime();
             }
         }
         $itemsHash = md5($itemsKey);
@@ -387,8 +381,8 @@ class WebLoader
     public function validateRemoteSources()
     {
         foreach ($this->items as $item){
-            if(!$item->isLocal() && !$this->urlExists($item->getPath())){
-                throw new \Exception('Source: '.$item->getPath().' does not exist');
+            if(!$item->isLocal() && !$this->urlExists($item->getDisplayPath())){
+                throw new \Exception('Source: '.$item->getDisplayPath().' does not exist');
             }
         }
     }

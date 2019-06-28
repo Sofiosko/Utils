@@ -5,33 +5,30 @@ namespace BiteIT\Utils;
 class WebLoaderItem
 {
     protected $properties = [];
-    protected $path;
+    protected $displayPath;
     protected $type;
     protected $local;
-    protected $clearPath;
     protected $fileName;
+    protected $clearPath;
 
-    public function __construct($path, $type, $local, $fileName = null)
+    public function __construct($displayPath, $type, $local, $fileName = null)
     {
-        $this->path = $path;
+        $this->displayPath = $displayPath;
         $this->type = $type;
         $this->local = $local;
-        $this->fileName = explode("?", $fileName)[0];
-        if (isset($fileName) && !file_exists($this->fileName))
-            throw new \Exception("{$this->fileName} does not exist");
-        $this->clearPath = explode("?", $this->path)[0];
+        $this->fileName = $fileName;
+        $this->clearPath = isset($this->fileName) ? explode("?", $this->fileName)[0] : explode("?", $this->displayPath)[0];
+
+        if ($local && !file_exists($this->clearPath)) {
+            throw new \Exception("File {$this->clearPath} does not exist");
+        }
 
         if ($this->type == WebLoader::TYPE_CSS) {
             $this->setProperty("rel", "stylesheet");
-            $this->setProperty("href", $path);
+            $this->setProperty("href", $displayPath);
         } elseif ($this->type == WebLoader::TYPE_JS) {
-            $this->setProperty("src", $path);
+            $this->setProperty("src", $displayPath);
         }
-    }
-
-    public function getClearPath()
-    {
-        return $this->clearPath;
     }
 
     public function getFileName()
@@ -39,15 +36,20 @@ class WebLoaderItem
         return $this->fileName;
     }
 
-    public function getPath()
+    public function getDisplayPath()
     {
-        return $this->path;
+        return $this->displayPath;
+    }
+
+    public function getClearPath()
+    {
+        return $this->clearPath;
     }
 
     public function getMTime()
     {
         if ($this->isLocal()) {
-            return filemtime($this->getFileName());
+            return filemtime($this->getClearPath());
         }
         return false;
     }
@@ -59,7 +61,7 @@ class WebLoaderItem
 
     public function isMinified()
     {
-        return strpos($this->path, ".min.") !== false;
+        return strpos($this->displayPath, ".min.") !== false;
     }
 
     public function __toString()
