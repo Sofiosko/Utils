@@ -157,8 +157,6 @@ class WebLoader
             $this->validateCacheDestination();
         }
 
-        var_dump($this->cache);
-
         $html = '';
         if ($this->cache && $this->itemsType == static::TYPE_CSS) {
             Timer::start('WebLoader-render-css');
@@ -221,7 +219,6 @@ class WebLoader
         $displayName = $this->destinationUrl . $name;
 
         if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
-            var_dump('recreating:'.$fileName);
             $this->_removeAllOldCSSFiles($baseHash);
             $cssContent = $this->_minimizeAndMergeCss($items);
             file_put_contents($fileName, $cssContent);
@@ -256,7 +253,6 @@ class WebLoader
         $displayName = $this->destinationUrl . $name;
 
         if ($this->isFileObsolete($fileName) || $this->isFileInvalid($fileName)) {
-            var_dump('recreating:'.$fileName);
             $this->_removeAllOldJSFiles($baseHash);
             $this->jsMinifier->minify($fileName);
         }
