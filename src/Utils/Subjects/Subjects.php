@@ -49,9 +49,9 @@ class Subjects
         if ($res) {
             $res = json_decode($res);
             if (isset($res->info)) {
-                $subject = Subject::createFromResponse($res->info);
-                return $subject;
+                $res->subject = Subject::createFromResponse($res->info);
             }
+            return $res;
         }
 
         return null;
