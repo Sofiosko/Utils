@@ -111,7 +111,7 @@ class Subjects
     /**
      * @param int|null $cacheTime
      */
-    public function setCacheTime(int $cacheTime): void
+    public function setCacheTime(int $cacheTime)
     {
         $this->cacheTime = $cacheTime;
     }
@@ -156,7 +156,7 @@ class Subjects
     /**
      * @param string $cacheFolder
      */
-    public function setCacheFolder(string $cacheFolder): void
+    public function setCacheFolder(string $cacheFolder)
     {
         $this->cacheFolder = $cacheFolder;
     }
