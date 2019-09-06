@@ -29,8 +29,8 @@ class ExampleDataStorage
         ]
     ];
 
-    public function getDataContainerName()
+    protected function getDataForWalker()
     {
-        return 'data';
+        return $this->data;
     }
 }
