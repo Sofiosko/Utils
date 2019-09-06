@@ -10,6 +10,10 @@ trait ArrayWalkerTrait
         return $this->getWalker()->get($key, $defaultValue);
     }
 
+    public function hasData(){
+        return $this->getWalker()->count() > 0;
+    }
+
     protected function getWalker(){
         if(isset($this->walker))
             return $this->walker;
