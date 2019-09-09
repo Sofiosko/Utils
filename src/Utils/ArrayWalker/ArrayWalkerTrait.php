@@ -6,7 +6,7 @@ trait ArrayWalkerTrait
 {
     protected $walker = null;
 
-    public function getData($key, $defaultValue = null){
+    public function getValue($key, $defaultValue = null){
         return $this->getWalker()->get($key, $defaultValue);
     }
 
