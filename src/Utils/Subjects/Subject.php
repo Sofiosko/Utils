@@ -8,6 +8,9 @@ class Subject
             $companyName,
             $isCompany = false,
             $street,
+            $streetHn,
+            $streetOn,
+            $streetOnly,
             $zip,
             $city;
 
@@ -24,6 +27,9 @@ class Subject
         $subject->street = $info->__street;
         $subject->city = $info->__city;
         $subject->zip = $info->__zip;
+        $subject->streetHn = $info->__street_hn ?? null;
+        $subject->streetOn = $info->__street_on ?? null;
+        $subject->streetOnly = $info->__street_only ?? null;
         return $subject;
     }
 }
