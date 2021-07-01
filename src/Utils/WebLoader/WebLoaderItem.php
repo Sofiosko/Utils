@@ -69,9 +69,9 @@ class WebLoaderItem
         return $this->render();
     }
 
-    public function render()
+    public function render($properties = [])
     {
-        return ($this->type == WebLoader::TYPE_CSS ? $this->renderCss() : $this->renderJs());
+        return ($this->type == WebLoader::TYPE_CSS ? $this->renderCss($properties) : $this->renderJs($properties));
     }
 
     /**
@@ -85,9 +85,8 @@ class WebLoaderItem
         return $this;
     }
 
-    protected function renderCss()
+    protected function renderCss($properties = [])
     {
-        $properties = [];
         foreach ($this->properties as $key => $value) {
             if ($value)
                 $properties[] = $key . '="' . $value . '"';
@@ -97,9 +96,8 @@ class WebLoaderItem
         return '<link ' . implode(' ', $properties) . ' />';
     }
 
-    protected function renderJs()
+    protected function renderJs($properties = [])
     {
-        $properties = [];
         foreach ($this->properties as $key => $value) {
             $properties[] = $key . '="' . $value . '"';
         }

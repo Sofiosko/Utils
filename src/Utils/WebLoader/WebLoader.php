@@ -141,10 +141,11 @@ class WebLoader
     }
 
     /**
+     * @param array $properties
      * @return string
      * @throws \Exception
      */
-    public function render()
+    public function render($properties = [])
     {
         Timer::start('WebLoader-render');
 
@@ -169,7 +170,7 @@ class WebLoader
                     $html .= $item->render();
             }
             Timer::start('WebLoader-render-css-minifying');
-            $html .= $this->_getMinimizedCss($itemsToMinimize)->render();
+            $html .= $this->_getMinimizedCss($itemsToMinimize)->render($properties);
             Timer::end('WebLoader-render-css-minifying');
             Timer::end('WebLoader-render-css');
 
