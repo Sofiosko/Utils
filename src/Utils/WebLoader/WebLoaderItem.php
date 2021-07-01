@@ -99,7 +99,10 @@ class WebLoaderItem
     protected function renderJs($properties = [])
     {
         foreach ($this->properties as $key => $value) {
-            $properties[] = $key . '="' . $value . '"';
+            if ($value)
+                $properties[] = $key . '="' . $value . '"';
+            else
+                $properties[] = $key;
         }
         return '<script ' . implode(' ', $properties) . '></script>';
     }

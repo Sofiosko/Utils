@@ -185,7 +185,7 @@ class WebLoader
                     $html .= $item->render();
             }
             Timer::start('WebLoader-render-js-minifying');
-            $html .= $this->_getMinimizedJs($itemsToMinimize)->render();
+            $html .= $this->_getMinimizedJs($itemsToMinimize)->render($properties);
             Timer::end('WebLoader-render-js-minifying');
             Timer::end('WebLoader-render-js');
         } else {
