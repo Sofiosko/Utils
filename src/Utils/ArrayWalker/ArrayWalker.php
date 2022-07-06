@@ -68,6 +68,7 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
         return (array)$this->array;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -77,46 +78,55 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->array[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->array[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->array[$offset]) ? $this->array[$offset] : null;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->position = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->array[$this->key()];
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return array_keys($this->array)[$this->position];
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset(array_keys($this->array)[$this->position]);
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->array);
