@@ -19,7 +19,7 @@ class Subjects
     }
 
     /**
-     * @param $cacheFolder
+     * @param      $cacheFolder
      * @param null $cacheTime
      * @return $this
      */
@@ -118,8 +118,8 @@ class Subjects
 
     /**
      * @param string $endpoint
-     * @param array $params
-     * @param bool $cache
+     * @param array  $params
+     * @param bool   $cache
      * @return false|string
      */
     protected function callApi(string $endpoint, array $params, $cache = true)
@@ -139,7 +139,19 @@ class Subjects
             }
         }
 
-        $response = file_get_contents($url);
+        $referer = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : $_SERVER['HTTP_HOST'];
+        $opts = array(
+            'http' => array(
+                'header' => array("Referer: $referer\r\n")
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $response = file_get_contents($url, false, $context);
+
+        if (strpos($response, 'SoapFault') !== false) {
+            return false;
+        }
         if ($cache)
             file_put_contents($file, $response);
         return $response;

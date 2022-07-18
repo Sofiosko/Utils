@@ -13,6 +13,10 @@
 	  "name": "Marek Konderla",
 	  "email": "mar.konderla@gmail.com"
 	}
+	{
+	  "name": "Radek Boszczyk",
+	  "email": "radek@biteit.cz"
+	}
   ],
   "autoload": {
 	"classmap": [
