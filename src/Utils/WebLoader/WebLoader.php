@@ -145,7 +145,7 @@ class WebLoader
      * @return string
      * @throws \Exception
      */
-    public function render($properties = [])
+    public function render($properties = [], $hashInNameReplacement = null)
     {
         Timer::start('WebLoader-render');
 
@@ -170,7 +170,7 @@ class WebLoader
                     $html .= $item->render();
             }
             Timer::start('WebLoader-render-css-minifying');
-            $html .= $this->_getMinimizedCss($itemsToMinimize)->render($properties);
+            $html .= $this->_getMinimizedCss($itemsToMinimize, $hashInNameReplacement)->render($properties);
             Timer::end('WebLoader-render-css-minifying');
             Timer::end('WebLoader-render-css');
 
@@ -185,7 +185,7 @@ class WebLoader
                     $html .= $item->render();
             }
             Timer::start('WebLoader-render-js-minifying');
-            $html .= $this->_getMinimizedJs($itemsToMinimize)->render($properties);
+            $html .= $this->_getMinimizedJs($itemsToMinimize, $hashInNameReplacement)->render($properties);
             Timer::end('WebLoader-render-js-minifying');
             Timer::end('WebLoader-render-js');
         } else {
@@ -207,7 +207,7 @@ class WebLoader
      * @return WebLoaderItem
      * @throws \Exception
      */
-    protected function _getMinimizedCss($items)
+    protected function _getMinimizedCss($items, $hashInNameReplacement = null)
     {
         $tempFolder = $this->_getPathToWebTemp();
 
@@ -215,15 +215,26 @@ class WebLoader
         $itemsHash = $this->_getFilesHash($items);
         $itemsHashName = "$baseHash-$itemsHash";
 
-        $name = 'style-' . $itemsHashName . '.css';
-        $destinationFileName = $tempFolder . $name;
-        $destinationUrl = $this->destinationUrl . $name;
+        if(isset($hashInNameReplacement)){
+            $name = 'style-' . $hashInNameReplacement . '.css';
+            $destinationFileName = $tempFolder . $name;
+            $destinationUrl = $this->destinationUrl . $name;
+        } else {
+            $name = 'style-' . $itemsHashName . '.css';
+            $destinationFileName = $tempFolder . $name;
+            $destinationUrl = $this->destinationUrl . $name;
+        }
 
         if ($this->isFileObsolete($destinationFileName) || $this->isFileInvalid($destinationFileName)) {
             $this->_removeAllOldCSSFiles($baseHash);
             $cssContent = $this->_minimizeAndMergeCss($items);
             file_put_contents($destinationFileName, $cssContent);
         }
+
+        if(isset($hashInNameReplacement) && file_exists($destinationFileName)){
+            $destinationUrl .= '?'.filemtime($destinationFileName);
+        }
+
         $webLoaderItem = new WebLoaderItem($destinationUrl, static::TYPE_CSS, false, $destinationFileName);
         return $webLoaderItem;
     }
@@ -235,7 +246,7 @@ class WebLoader
      * @return WebLoaderItem
      * @throws \Exception
      */
-    protected function _getMinimizedJs($items)
+    protected function _getMinimizedJs($items, $hashInNameReplacement = null)
     {
         $tempFolder = $this->_getPathToWebTemp();
 
@@ -247,14 +258,25 @@ class WebLoader
         $itemsHash = $this->_getFilesHash($items);
         $itemsHashName = "$baseHash-$itemsHash";
 
-        $name = 'js-' . $itemsHashName . '.min.js';
-        $destinationFileName = $tempFolder . $name;
-        $destinationUrl = $this->destinationUrl . $name;
+        if(isset($hashInNameReplacement)){
+            $name = 'js-' . $hashInNameReplacement . '.min.js';
+            $destinationFileName = $tempFolder . $name;
+            $destinationUrl = $this->destinationUrl . $name;
+        } else {
+            $name = 'js-' . $itemsHashName . '.min.js';
+            $destinationFileName = $tempFolder . $name;
+            $destinationUrl = $this->destinationUrl . $name;
+        }
 
         if ($this->isFileObsolete($destinationFileName) || $this->isFileInvalid($destinationFileName)) {
             $this->_removeAllOldJSFiles($baseHash);
             $this->jsMinifier->minify($destinationFileName);
         }
+
+        if(isset($hashInNameReplacement) && file_exists($destinationFileName)){
+            $destinationUrl .= '?'.filemtime($destinationFileName);
+        }
+
         $webLoaderItem = new WebLoaderItem($destinationUrl, static::TYPE_JS, false, $destinationFileName);
         return $webLoaderItem;
     }
@@ -418,6 +440,7 @@ class WebLoader
     protected function validateCacheDestination(){
         $destinationDir = $this->destinationDir;
         if(!file_exists($destinationDir) || !is_dir($destinationDir) || !is_readable($destinationDir)){
+            trigger_error('Cache dir `'.$destinationDir.'` does not exist.', E_USER_WARNING);
             $this->cache = false;
             return false;
         }
