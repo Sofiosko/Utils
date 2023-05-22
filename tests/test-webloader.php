@@ -13,8 +13,10 @@ use BiteIT\Utils\Timer;
     <title>Webloader test</title>
     <meta name="author" content="Marek Konderla">
     <?php
+    $url = dirname(explode('?', $_SERVER['REQUEST_URI'])[0]);
+
     Timer::start('WebLoader');
-    $wlc = new WLCreator(__DIR__ . '/webtemp/', 'http://localhost/Utils/tests/webtemp', __DIR__ . '/assets', 'http://localhost/Utils/tests/assets');
+    $wlc = new WLCreator(__DIR__ . '/webtemp/', $url.'/webtemp', __DIR__ . '/assets', $url.'/assets');
     $wlc->setCache(true);
 
     $wl = $wlc->getCssLoader();
@@ -29,7 +31,7 @@ use BiteIT\Utils\Timer;
     $wl->addLocal('style-5.min.css');
     $wl->addRemote('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
 //    $wl->validateRemoteSources();
-    echo $wl->render();
+    echo $wl->render([], 'fixed-name');
 
     $wl = $wlc->getJsLoader();
     $wl->addLocal('test.js');
