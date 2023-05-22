@@ -35,7 +35,7 @@ class Subjects
     /**
      * @param string $companyCode
      * @param string $countryCode
-     * @return Subject|null
+     * @return ResponseType
      * @throws \Exception
      */
     public function getCompanyInfo(string $companyCode, $countryCode = Subjects::COUNTRY_CZ)
