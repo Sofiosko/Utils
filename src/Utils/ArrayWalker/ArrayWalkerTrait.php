@@ -4,13 +4,14 @@ namespace BiteIT\Utils;
 
 trait ArrayWalkerTrait
 {
-    protected $walker = null;
+    protected mixed $walker = null;
 
-    public function getValue($key, $defaultValue = null){
+    public function getValue($key, $defaultValue = null): mixed{
         return $this->getWalker()->get($key, $defaultValue);
     }
 
-    public function hasData(){
+    public function hasData(): bool
+    {
         return $this->getWalker()->count() > 0;
     }
 

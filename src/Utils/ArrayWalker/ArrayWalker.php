@@ -4,8 +4,8 @@ namespace BiteIT\Utils;
 
 class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
 {
-    protected $array;
-    protected $position = 0;
+    protected array $array;
+    protected int $position = 0;
 
     /**
      * ArrayWalker constructor.
@@ -20,7 +20,7 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
      * @param array $array
      * @return ArrayWalker
      */
-    public static function create(array $array)
+    public static function create(array $array): ArrayWalker
     {
         return new static($array);
     }
@@ -30,7 +30,7 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
      * @param null $defaultValue
      * @return mixed|null
      */
-    public function get($key, $defaultValue = null)
+    public function get($key, $defaultValue = null): mixed
     {
         $keys = explode("/", $key);
         $data = $this->fetch($keys);
@@ -44,7 +44,7 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
      * @param null $currentData
      * @return mixed|null
      */
-    protected function fetch(array $keys, $currentData = null)
+    protected function fetch(array $keys, $currentData = null): mixed
     {
         $currentData = $currentData ?? $this->array;
         $actualKey = array_values($keys)[0];
@@ -69,7 +69,7 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
     }
 
     #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->array[] = $value;
@@ -79,13 +79,13 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
     }
 
     #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->array[$offset]);
     }
 
     #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->array[$offset]);
     }
@@ -93,11 +93,11 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->array[$offset]) ? $this->array[$offset] : null;
+        return $this->array[$offset] ?? null;
     }
 
     #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -115,19 +115,19 @@ class ArrayWalker implements \Iterator, \ArrayAccess, \Countable
     }
 
     #[\ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
 
     #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         return isset(array_keys($this->array)[$this->position]);
     }
 
     #[\ReturnTypeWillChange]
-    public function count()
+    public function count(): int
     {
         return count($this->array);
     }

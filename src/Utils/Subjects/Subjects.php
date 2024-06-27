@@ -9,9 +9,9 @@ class Subjects
 
     const SUBJECTS_API_URL = 'http://subjects.biteit.cz/api';
 
-    protected $license;
-    protected $cacheTime = 86400;
-    protected $cacheFolder;
+    protected string $license;
+    protected int $cacheTime = 86400;
+    protected string $cacheFolder;
 
     public function __construct($license)
     {
@@ -38,7 +38,7 @@ class Subjects
      * @return ResponseType
      * @throws \Exception
      */
-    public function getCompanyInfo(string $companyCode, $countryCode = Subjects::COUNTRY_CZ)
+    public function getCompanyInfo(string $companyCode, string $countryCode = Subjects::COUNTRY_CZ): ?ResponseType
     {
         $res = $this->callApi('get-info', [
             'cc' => $countryCode,
@@ -63,7 +63,7 @@ class Subjects
      * @return bool
      * @throws \Exception
      */
-    public function validateTaxNumber(string $taxNumber, $countryCode = Subjects::COUNTRY_CZ)
+    public function validateTaxNumber(string $taxNumber, string $countryCode = Subjects::COUNTRY_CZ): ?bool
     {
         $res = $this->callApi('validate-tax-number', [
             'cc' => $countryCode,
@@ -84,7 +84,7 @@ class Subjects
      * @return bool
      * @throws \Exception
      */
-    public function validateCompanyCode(string $companyCode, $countryCode = Subjects::COUNTRY_CZ)
+    public function validateCompanyCode(string $companyCode, string $countryCode = Subjects::COUNTRY_CZ)
     {
         $res = $this->callApi('validate-company-code', [
             'cc' => $countryCode,
@@ -111,7 +111,7 @@ class Subjects
     /**
      * @param int|null $cacheTime
      */
-    public function setCacheTime(int $cacheTime)
+    public function setCacheTime(int $cacheTime): void
     {
         $this->cacheTime = $cacheTime;
     }
@@ -122,7 +122,7 @@ class Subjects
      * @param bool   $cache
      * @return false|string
      */
-    protected function callApi(string $endpoint, array $params, $cache = true)
+    protected function callApi(string $endpoint, array $params, $cache = true): bool|string
     {
         $url = static::SUBJECTS_API_URL . '/' . $endpoint . '?' . http_build_query($params);
         $file = realpath($this->cacheFolder) . '/response-' . md5($url) . '.json';
@@ -139,7 +139,7 @@ class Subjects
             }
         }
 
-        $referer = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : $_SERVER['HTTP_HOST'];
+        $referer = $_SERVER['SCRIPT_URI'] ?? $_SERVER['HTTP_HOST'];
         $opts = array(
             'http' => array(
                 'header' => array("Referer: $referer\r\n")
@@ -168,7 +168,7 @@ class Subjects
     /**
      * @param string $cacheFolder
      */
-    public function setCacheFolder(string $cacheFolder)
+    public function setCacheFolder(string $cacheFolder): void
     {
         $this->cacheFolder = $cacheFolder;
     }
