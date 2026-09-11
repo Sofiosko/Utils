@@ -1,24 +1,26 @@
 <?php
+
 namespace BiteIT\Utils;
 
 class Subject
 {
-    public  $companyCode,
-            $taxNumber,
-            $companyName,
-            $isCompany = false,
-            $street,
-            $streetHn,
-            $streetOn,
-            $streetOnly,
-            $zip,
-            $city;
+    public string $companyCode;
+    public string $taxNumber;
+    public string $companyName;
+    public bool $isCompany = false;
+    public string $street;
+    public string $streetHn;
+    public string $streetOn;
+    public string $streetOnly;
+    public string $zip;
+    public string $city;
 
     /**
      * @param \stdClass $info
      * @return Subject
      */
-    public static function createFromResponse(\stdClass $info){
+    public static function createFromResponse(\stdClass $info): Subject
+    {
         $subject = new static();
         $subject->companyCode = $info->__number;
         $subject->taxNumber = $info->__taxNumber;

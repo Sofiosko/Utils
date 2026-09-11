@@ -4,10 +4,10 @@ namespace BiteIT\Utils;
 
 class Subjects
 {
-    const COUNTRY_CZ = 'cz';
-    const COUNTRY_SK = 'sk';
+    protected const COUNTRY_CZ = 'cz';
+    protected const COUNTRY_SK = 'sk';
 
-    const SUBJECTS_API_URL = 'http://subjects.biteit.cz/api';
+    protected const SUBJECTS_API_URL = 'http://subjects.biteit.cz/api';
 
     protected string $license;
     protected int $cacheTime = 86400;
