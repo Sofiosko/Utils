@@ -7,7 +7,7 @@ class Subjects
     protected const COUNTRY_CZ = 'cz';
     protected const COUNTRY_SK = 'sk';
 
-    protected const SUBJECTS_API_URL = 'http://subjects.biteit.cz/api';
+    protected const SUBJECTS_API_URL = 'https://subjects.biteit.cz/api';
 
     protected string $license;
     protected int $cacheTime = 86400;
